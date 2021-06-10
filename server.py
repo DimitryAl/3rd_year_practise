@@ -1,6 +1,8 @@
+﻿import socket
 
-from threading import Thread
-import socket
+#from _thread import *
+import threading
+#from threading import Thread
 
 from classes import Node, Edge, Route, Passenger, Bus
 from func import generate_passenger
