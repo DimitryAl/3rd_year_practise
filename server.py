@@ -1,6 +1,5 @@
-#import threading 
-from threading import Thread
 
+from threading import Thread
 import socket
 
 from classes import Node, Edge, Route, Passenger, Bus
@@ -89,7 +88,7 @@ if __name__ == "__main__":
     server_name = 'test server'
     server_thread = ServerThread(server_name)
     print(type(server_thread))
-    # server_thread.start()
+    server_thread.start()
     # model_name = 'test model'
     # model_thread = ModelThread(model_name)
     # model_thread.start()
