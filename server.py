@@ -50,14 +50,17 @@ class ServerThread(Thread):
                     str_data = data.decode('utf-8')
                     print('Recieved data: ', str_data)
                     if str_data == 'set_location':
-                        print('setting up users location')
-                        client_sock.sendall('Input you location'.encode('utf-8'))
+                        print('Setting up users location')
+                        client_sock.sendall('Setting up your location'.encode('utf-8'))
+                        #data = client_sock.recv(1024)
+                        #str_data = data.decode('utf-8')
                         data = client_sock.recv(1024)
                         str_data = data.decode('utf-8')
                         user.location = str_data.split(';')
                         user.location[0] = int(user.location[0])
                         user.location[1] = int(user.location[1])
-                        client_sock.sendall('Your location is set'.encode('utf-8'))
+                        client_sock.sendall(f'Your location is {user.location[0]};{user.location[1]}'.encode('utf-8'))
+                        # client_sock.sendall('Your location is set'.encode('utf-8'))
                     if str_data == 'my_location':
                         data = 'Your current location is: ' + '[' + str(user.location[0]) +  ';' + str(user.location[1]) + ']'
                         client_sock.sendall(data.encode('utf-8'))
@@ -70,16 +73,31 @@ class ServerThread(Thread):
                                 break
                             if min == -1:
                                 min = math.sqrt((node.location[0] - user.location[0])**2 + (node.location[1] - user.location[1])**2)
-                                name = node.name
-                                data = ("Nearest station to you is " + name + ' in ' + str(min)).encode('utf-8')
+                                # data = ("Nearest station to you is " + name + ' in ' + str(min)).encode('utf-8')
+                                data = ("Nearest station to you is " + node.name + ' ' + str(node.location)).encode('utf-8')
                             else:
                                 temp = math.sqrt((node.location[0] - user.location[0])**2 + (node.location[0] - user.location[0])**2)
                                 if temp < min:
                                     min = temp
                                     name = node.name
-                                    data = ("Nearest station to you is " + name + ' in ' + str(min)).encode('utf-8')
-                        client_sock.sendall(data)
+                                    #data = ("Nearest station to you is " + name + ' in ' + str(min)).encode('utf-8')
+                                    data = ("Nearest station to you is " + node.name + ' ' + str(node.location)).encode('utf-8')
 
+                        print('Sending nearest location')
+                        client_sock.sendall(data)
+                    if str_data == 'bus_list':
+                        data = ''
+                        for bus in buses:
+                            data += (bus.name + ';')
+                        client_sock.sendall(data.encode('utf-8'))
+                        
+
+                    if str_data == 'station_list':
+                        data = ''
+                        for node in nodes:
+                            data += (node.name + ';')
+                        client_sock.sendall(data.encode('utf-8'))
+                        break
                     #client_sock.sendall(b'smth')
 
             client_sock.close()
