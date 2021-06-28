@@ -1,10 +1,15 @@
 
+from os import X_OK
+
+
 class Node:
     name = ''
     availability = 0
-    def __init__(self, name, availability):
+    def __init__(self, name, availability, coords):
         self.name = name
         self.availability = availability
+        self.location = coords
+    
     def change_availability(self):
         if self.availability == 0:
             self.availability = 1
@@ -88,3 +93,8 @@ class Bus:
                     passenger.bus = ''
                     self.cur_pas -= 1
                     passengers.remove(passenger)
+
+class User:
+    
+    def __init__(self, location):
+        self.location = location
